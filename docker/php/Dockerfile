@@ -1,33 +1,45 @@
-FROM php:7.3-fpm
+FROM php:8.0.7-fpm
 
-RUN set -e
-RUN apt-get update
-RUN apt-get install -y apt-utils
-RUN apt-get install -y build-essential
-RUN apt-get install -y locales
-RUN apt-get install -y gettext gettext-doc libgettextpo-dev
+ARG user
+ARG uid
 
-RUN apt-get install -yq \
-    git \
-    zip \
-    libfreetype6-dev \
-    libmcrypt-dev \
-    libjpeg-dev \
-    libicu-dev \
-    libgettextpo-dev \
-    libpng-dev
+# Install dependencies
+RUN apt-get update && apt-get install -y \
+   libonig-dev \
+   libmcrypt-dev \
+   zlib1g-dev \
+   libpng-dev \
+   libxml2-dev \
+   nano \
+   zip \
+   git
 
-RUN docker-php-ext-install pdo_mysql \
-    gd \
+# Clear cache
+RUN apt-get clean && rm -rf /var/lib/apt/lists/*
+
+# Install extensions
+RUN docker-php-ext-install \
+    bcmath \
+    dom \
+    intl \
     mbstring \
     mysqli \
-    gettext \
-    intl
+    opcache \
+    pdo \
+    pdo_mysql
+
+RUN docker-php-ext-configure gd
+RUN docker-php-ext-install gd
+
+RUN pecl install xdebug-3.0.1 \
+    && docker-php-ext-enable xdebug \
+    && echo "xdebug.mode=debug" >> /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini
 
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
 
-RUN locale-gen en_US.UTF-8
-RUN locale-gen pt_BR.UTF-8
-RUN locale-gen ru_RU.UTF-8
+# Create system user to run Composer and Artisan Commands
+RUN useradd -G www-data,root -u $uid -d /home/$user $user
+RUN mkdir -p /home/$user/.composer && \
+    chown -R $user:$user /home/$user
 
-RUN chown -R www-data:www-data /var/www
+USER $user

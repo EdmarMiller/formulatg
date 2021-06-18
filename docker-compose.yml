@@ -16,13 +16,21 @@ services:
       - api
 
   api:
-    build: ./docker/php
+    build:
+      args:
+        user: danilo
+        uid: 1000
+      context: ./docker/php
+      dockerfile: Dockerfile
     container_name: api
     networks:
       - backend
       - db
     volumes:
       - ./:/var/www/html
+    environment:
+      XDEBUG_CONFIG: client_host=172.17.0.1
+      PHP_IDE_CONFIG: serverName=localhost
     depends_on:
       - database
 
