@@ -1,105 +1,80 @@
 <?php
 
-require __DIR__ . DIRECTORY_SEPARATOR . 'src/models/Connection.php';
-require __DIR__ . DIRECTORY_SEPARATOR . 'src/controller/Player.php';
+require __DIR__ . DIRECTORY_SEPARATOR;
+require __DIR__ . DIRECTORY_SEPARATOR;;
+
+$today = date('j-m-y');
+echo "$today";
+
+//$d = new Driver();
+//$array = $p->find();
+//
+//print_r($array);
+//
+//$array = (shuffle($array));
+//
+//print_r($array);
+//
+//
+//// Sorteio do inicio da corrida
+//echo "\n\n\n";
+
+//$numbers = range(1, 10);
+//echo "\n\n";
+//print_r($numbers);
+//echo "\n\n";
+//
+//$num1 = $numbers[4];
+//$num2 = $numbers[3];
+//
+//
+//if ($num1 > $num2) {
+//   echo "{$num1} é maior {$num2})";
+//} else {
+//    echo "{$num1} é menor {$num2} ";
+//}
 
 
-function obterOpcaoUsuario()
+$p = new Driver();
+$data = $p->find();
+//print_r($data);
+
+foreach ($data as ["id" => $id, "name" => $name, "status" => $status]) {
+   echo "id: $id | name: $name | position: $status |\n";
+}
+
+function passar(int $idAttack, int $idDefend): void
 {
-   echo gmdate('Y-m-d H:i:s');
-   echo("\n!!!---> WELCOME FORMULA TG <---!!!\n");
-   //echo microtime();
+   $sql = "UPDATE drivers SET name=?, country=? WHERE id=$id";
 
-   echo("WELCOME CHOISE AN OPTION\n");
-
-   echo("1- RUN\n");
-   echo("2- CARS\n");
-   echo("3- PLAYERS\n");
-
-   echo("\nX- EXIT\n");
-
-   $opcaoUsuario = readLine();
-   $opcaoUsuario = strtoupper($opcaoUsuario);
-
-   echo("\n");
-
-   return ($opcaoUsuario);
-
+   $update = $this->pdo->prepare($sql);
+   $update->execute([$name, $country]);
 }
-function op ()
-{
-   while ($opcaoUsuario !== "X") {
-      switch ($opcaoUsuario) {
-         case 1:
-            echo "Cadastrar Player \n";
-            echo "pegar os dados aqui";
-            echo "pegar os dados aqui";
-            echo "pegar os dados aqui";
-            echo "pegar os dados aqui";
-            break;
-         case 2:
-            echo"Aqui vamos cadastrar algoooo\n";
+passar();
 
-            break;
-         case 3:
-            echo "Visualizar Grid \n";
-            obterOpcaoPlayer();
-            break;
-         case 4:
-            echo "Iniciar Corrida \n";
-            break;
-         default:
-            echo "Selecione uma opção valida ou X para sair\n";
+//foreach ($numbers as $number) {
+//   echo "$number ";
+//}
 
-      }
-
-      $opcaoUsuario = obterOpcaoUsuario();
-   }
-}
-
-op();
+/*TODO Setar position de largada, shuffle ou não
+$numbers = range(1, 25);
+foreach ($numbers as $number) {
+   echo "$number ";*/
+//}
+//echo"\n";
+//
+//shuffle($numbers);
+//
+//foreach ($numbers as $number) {
+//   echo "$number ";
+//}
+//echo"\n";
+// TODO Contar itens Array
 
 
-
-function cadastrarPlayer() {
-    echo("\n!!!----> FG RANCING <----!!!\n");
-    echo("\n!!!----> CADASTRAR player <----!!!\n\n");
-
-    $brand = readline("Digite a Marca: ");
-    $model =readline("Digite a Modelo: ");
-    $color = readline("Digite a cor: ");
-    $yrs =readline("Digite o Ano: ");
-
-}
-
-
-function obterOpcaoPlayer()
-{
-   echo gmdate('Y-m-d H:i:s');
-   echo("\n!!!---> WELCOME FORMULA TG <---!!!\n");
-   //echo microtime();
-
-   echo("WELCOME CHOISE AN OPTION\n");
-
-   echo("1- CREATE\n");
-   echo("2- VIEW\n");
-   echo("3- UPDATE\n");
-   echo("4- DELETE\n");
-
-   echo("5- BACK\n");
-
-   echo("\nX- EXIT\n");
-
-   $opcaoUsuario = readLine();
-   $opcaoUsuario = strtoupper($opcaoUsuario);
-
-   echo("\n");
-
-   return ($opcaoUsuario);
-
-}
-
-
+// Usar para retornar Msg de numero de participantes solicitados, maiores que os Registrados.
+//$count = count($array)
+//print_r(count($count));
 
 
 

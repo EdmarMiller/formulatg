@@ -1,27 +1,14 @@
 <?php
-header('Content-Type: application/json');
+//header('Content-Type: application/json');
 
-require __DIR__ . DIRECTORY_SEPARATOR . 'src/models/Connection.php';
-require __DIR__ . DIRECTORY_SEPARATOR . 'src/controller/Player.php';
-require __DIR__ . DIRECTORY_SEPARATOR . 'MenuPrincipal.php';
+require __DIR__ . DIRECTORY_SEPARATOR;
+require __DIR__ . DIRECTORY_SEPARATOR;
 
-//$menu = new MenuPrincipal();
-//
-//$menu->run();
+$var = 'edmar';
+xdebug_info();
+exit;
 
-$player = new Player();
-
-$player->newPlayer("Edmar11", "Brasil11");
-
-
-
-
-
-
-
-
-
-
+//phpinfo();
 
 
 
