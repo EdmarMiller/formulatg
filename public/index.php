@@ -1,14 +1,11 @@
 <?php
-//header('Content-Type: application/json');
 
-require __DIR__ . DIRECTORY_SEPARATOR;
-require __DIR__ . DIRECTORY_SEPARATOR;
+require __DIR__ . '/../vendor/autoload.php';
 
-$var = 'edmar';
-xdebug_info();
+
+$menu = new \App\MainMenu();
+echo $menu->run();
 exit;
-
-//phpinfo();
 
 
 

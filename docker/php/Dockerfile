@@ -44,5 +44,9 @@ RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local
 RUN useradd -G www-data,root -u $uid -d /home/$user $user
 RUN mkdir -p /home/$user/.composer && \
     chown -R $user:$user /home/$user
+#PHPUNIT
+RUN composer global require "phpunit/phpunit"
+ENV PATH /root/.composer/vendor/bin:$PATH
+RUN ln -s /root/.composer/vendor/bin/phpunit /usr/bin/phpunit
 
 USER $user
