@@ -20,5 +20,8 @@
   "require": {
     "ext-readline": "*",
     "ext-pdo": "*"
+  },
+  "require-dev" : {
+    "phpunit/phpunit" : "*"
   }
 }

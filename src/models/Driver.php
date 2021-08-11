@@ -1,6 +1,6 @@
 <?php
 
-namespace App;
+namespace App\models;
 
 use Exception;
 use PDO;
@@ -53,19 +53,46 @@ class Driver
    private function insertDrive(array $data): void
    {
       $sql = 'INSERT INTO drivers(name , country) VALUES (?,?)';
-      $this->pdo->prepare($sql)->execute([$data['name'], $data['country']]);
+      $this->pdo->prepare($sql)
+         ->execute([$data['name'], $data['country']]);
    }
 
    public function findAll(): array
    {
-      $all = $this->pdo->query("SELECT * FROM drivers WHERE status = 1")
+      $all = $this->pdo
+         ->query("SELECT * FROM `drivers` WHERE `status` = 1")
+         ->fetchAll(PDO::FETCH_ASSOC);
+      return $all;
+   }
+
+   public function findAllId(): array
+   {
+      $all = $this->pdo
+         ->query("SELECT `id`, `name` FROM `drivers` WHERE `status` = 1")
+         ->fetchAll(PDO::FETCH_ASSOC);
+      return $all;
+   }
+
+   public function findAllAdversaries($id, $participants): array
+   {
+      $all = $this->pdo
+         ->query("SELECT `id`, `name` FROM `drivers` WHERE `status` = 1 AND id <> $id LIMIT $participants")
+         ->fetchAll(PDO::FETCH_ASSOC);
+      return $all;
+   }
+
+   public function findAllDrivers($id, $participants): array
+   {
+      $all = $this->pdo
+         ->query("SELECT `id`, `name` FROM `drivers` WHERE `status` = 1 AND id <> $id LIMIT $participants")
          ->fetchAll(PDO::FETCH_ASSOC);
       return $all;
    }
 
    public function findById(int $id): array
    {
-      $selectId = $this->pdo->query("SELECT * FROM drivers WHERE id = $id")
+      $selectId = $this->pdo
+         ->query("SELECT * FROM `drivers` WHERE `id` = $id")
          ->fetch(PDO::FETCH_ASSOC);
       return $selectId;
    }
@@ -82,14 +109,14 @@ class Driver
 
    public function updateDrive(array $data): void
    {
-      $sql = "UPDATE drivers SET name=?, country=? WHERE id=$data[id]";
+      $sql = "UPDATE `drivers` SET `name`=?, `country`=? WHERE `id`=$data[id]";
       $update = $this->pdo->prepare($sql);
       $update->execute([$data['name'], $data['country']]);
    }
 
    public function delete(string $id, int $status = 0): void
    {
-      $sql = "UPDATE drivers SET status=? WHERE id=$id";
+      $sql = "UPDATE `drivers` SET `status`=? WHERE `id`=$id";
       $del = $this->pdo->prepare($sql);
       $del->execute([$status]);
    }
@@ -111,7 +138,7 @@ class Driver
 
    private function checkNameExist(string $name): bool
    {
-      $sql = "SELECT COUNT(*) FROM drivers WHERE name = '" . $name . "'";
+      $sql = "SELECT COUNT(*) FROM `drivers` WHERE `name` = '" . $name . "'";
       $res = $this->pdo->query($sql);
       $count = $res->fetchColumn();
 
@@ -123,9 +150,9 @@ class Driver
       return true;
    }
 
-   public function checkIdExist(string $id): bool
+   public function checkIfIdExists(string $id): bool
    {
-      $sql = "SELECT COUNT(*) FROM drivers WHERE id = '" . $id . "'";
+      $sql = "SELECT COUNT(*) FROM `drivers` WHERE `id` = '" . $id . "'";
       $res = $this->pdo->query($sql);
       $count = $res->fetchColumn();
       if ($count > 0) {
@@ -137,7 +164,7 @@ class Driver
 
    public function numberAllDrivers(): int
    {
-      $sql = "SELECT COUNT(*) FROM drivers";
+      $sql = "SELECT COUNT(*) FROM `drivers`";
       $res = $this->pdo->query($sql);
       $count = $res->fetchColumn();
       return $count;

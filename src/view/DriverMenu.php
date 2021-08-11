@@ -1,7 +1,10 @@
 <?php
 
-namespace App;
 
+namespace App\view;
+
+
+use App\models\Driver;
 
 class DriverMenu
 {
@@ -24,12 +27,12 @@ class DriverMenu
    private function printDriverMenu(): void
    {
       system('clear');
-      display('__DRIVER OPTION__');
-      display('1- NEW DRIVER');
-      display('2- LIST DRIVERS');
-      display('3- EDIT DRIVERS');
-      display('4- DELETE DRIVERS');
-      display('5- BACK TO HOME');
+      display('__SELECIONE UMA OPÇÃO__');
+      display('1- NOVO PILOTO');
+      display('2- LISTAR PILOTOS');
+      display('3- EDITAR PILOTOS');
+      display('4- DELETAR PILOTOSS');
+      display('5- VOLTAR PARA O MENU PRINCIPAL');
    }
 
    private function defaultDriverMenu(): string
@@ -40,10 +43,10 @@ class DriverMenu
 
    private function new(): string
    {
-      display('__CADASTRAR NEW DRIVER__');
+      display('__CADASTRAR NOVO PILOTO__');
       $prompt = [];
-      $prompt['name'] = trim(readLine("digite seu nome: "));
-      $prompt['country'] = trim(readLine("digite seu pais: "));
+      $prompt['name'] = trim(readLine('digite seu nome: '));
+      $prompt['country'] = trim(readLine('digite seu pais: '));
 
       $driver = new Driver();
       $condition = $driver->validate($prompt);
@@ -57,7 +60,7 @@ class DriverMenu
 
    private function list(): string
    {
-      display('PILOTOS CADASTRADOS');
+      display('__PILOTOS CADASTRADOS__');
       $driver = new Driver();
       $array = $driver->findAll();
 
@@ -67,7 +70,7 @@ class DriverMenu
       foreach ($array as $driver) {
          printf($mask, $driver['id'], $driver['name'], $driver['country']);
       }
-      readline('Aperte qualquer tecla para continuar');
+      readline('PRESSIONE QUALQUER TECLA, PARA VOLTAR PRO MENU.');
       return $this->driverMenu();
    }
 
@@ -77,17 +80,17 @@ class DriverMenu
       $driver = new Driver();
       $prompt = [];
 
-      $prompt['id'] = trim(readLine("Digite ID: "));
+      $prompt['id'] = trim(readLine('Digite ID: '));
 
-      if ($driver->checkIdExist($prompt['id'])) {
+      if ($driver->checkIfIdExists($prompt['id'])) {
          message($driver->info($driver->findById($prompt['id'])));
 
-         $option = trim(readLine("Digite Y para confirmar selecao: "));
+         $option = trim(readLine('Digite Y para CONFIRMAR se o PILOTO selecionado e o correto: '));
          $option = strtoupper($option);
 
          if ($option == 'Y') {
-            $prompt['name'] = trim(readLine("digite o novo nome: "));
-            $prompt['country'] = trim(readLine("digite o novo pais: "));
+            $prompt['name'] = trim(readLine('digite o novo nome: '));
+            $prompt['country'] = trim(readLine('digite o novo pais: '));
 
             $condition = $driver->validate($prompt);
 
@@ -95,6 +98,7 @@ class DriverMenu
                echo $driver->update($prompt);
             }
          }
+
       }
       return $this->reloadDriverMenu();
    }
@@ -102,22 +106,22 @@ class DriverMenu
    private function delete()
    {
       {
-         display('__EDITAR DRIVER__');
+         display('__EDITAR PILOTO__');
          $driver = new Driver();
          $prompt = [];
 
-         $id = $prompt['id'] = trim(readLine("Digite ID: "));
+         $id = $prompt['id'] = trim(readLine('Digite ID: '));
 
-         if ($driver->checkIdExist($id)) {
+         if ($driver->checkIfIdExists($id)) {
             message($driver->info($driver->findById($id)));
 
-            $prompt['name'] = trim(readLine("Digite o nome e aperte enter para deletar: "));
+            $prompt['name'] = trim(readLine('Digite o nome e aperte enter para DELETAR: '));
 
             if ($prompt['name'] == $driver->findById($id)['name']) {
                $driver->delete($id);
-               message('Driver deletado');
+               message('Piloto deletado');
             } else {
-               message('Operação NÃO efetuada!!!');
+               message('O Piloto não foi deletado, confira os dados!!!');
             }
          }
          return $this->reloadDriverMenu();

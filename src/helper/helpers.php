@@ -3,7 +3,7 @@
 if (!function_exists('message')) {
    function message(string $msg): void
    {
-      system("clear");
+      system('clear');
       echo $msg . PHP_EOL;
    }
 }

@@ -1,7 +1,7 @@
 <?php
 
 
-namespace App;
+namespace App\view;
 
 
 class MainMenu
@@ -23,12 +23,12 @@ class MainMenu
    private function printMainMenu(): void
    {
       system('clear');
-      display('___ WELCOME FORMULA TG ___');
-      display('CHOISE AN OPTION');
-      display('1- DRIVERS');
-      display('2- CARS');
-      display('3- RUN');
-      display('5- EXIT');
+      display('___ BEM VINDO(A) A FORMULA TG ___');
+      display('ESCOLHA UMA OPÇÃO');
+      display('1- PILOTOS');
+      display('2- CARROS');
+      display('3- CORRER');
+      display('5- SAIR');
 
    }
 
@@ -41,7 +41,7 @@ class MainMenu
    private function endGame(): string
    {
       system('clear');
-      message('__Obrigado por jogar__');
+      message('__OBRIGADO POR JOGAR__');
       sleep(1.5) . system('clear');
       return exit();
    }

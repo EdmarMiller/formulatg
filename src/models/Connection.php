@@ -1,5 +1,5 @@
 <?php
-namespace App;
+namespace App\models;
 use PDO;
 use PDOException;
 
@@ -14,7 +14,11 @@ class Connection
    public function __construct()
    {
       try {
-         $this->_con = new PDO("mysql:host=$this->_dbHostname;dbname=$this->_dbName", $this->_dbUsername, $this->_dbPassword);
+         $this->_con = new PDO(
+            "mysql:host=$this->_dbHostname;
+            dbname=$this->_dbName",
+            $this->_dbUsername,
+            $this->_dbPassword);
          $this->_con->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
       } catch (PDOException $e) {
@@ -23,7 +27,6 @@ class Connection
       }
 
    }
-
    public function conn(): PDO
    {
       return $this->_con;

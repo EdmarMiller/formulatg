@@ -1,9 +1,8 @@
 <?php
 
-namespace App;
-
-use Exception;
+namespace App\models;
 use PDO;
+
 
 class Car
 {
@@ -19,50 +18,10 @@ class Car
       $this->pdo = (new Connection())->conn();
    }
 
-   public function getBrand(): string
-   {
-      return $this->brand;
-   }
-
-   public function setBrand($brand): void
-   {
-      $this->brand = $brand;
-   }
-
-   public function getModel(): string
-   {
-      return $this->model;
-   }
-
-   public function setModel($model): void
-   {
-      $this->model = $model;
-   }
-
-   public function getColor(): string
-   {
-      return $this->color;
-   }
-
-   public function setColor($color): void
-   {
-      $this->color = $color;
-   }
-
-   public function getYrs(): string
-   {
-      return $this->yrs;
-   }
-
-   public function setYrs($yrs): void
-   {
-      $this->yrs = $yrs;
-   }
-
    public function newCar(array $data): string
    {
       try {
-         $this->insertCar($data);
+         $this->insert($data);
          return $this->messageSuccess($data);
       } catch (\Exception $e) {
          return $e->getMessage();
@@ -72,24 +31,44 @@ class Car
    public function info(array $data): string
    {
       return 'Gostaria de editar o ID: ' . $data['id'] .
-         ', Marca: ' . $data['brand'] . ' , e Modelo: ' . $data['model'] . PHP_EOL;
+         ', Marca: ' . $data['brand'] . ' e Modelo: ' . $data['model'] . PHP_EOL;
    }
 
-   private function insertCar(array $data): void
+   public function msgDelete(array $data): string
    {
-      $sql = 'INSERT INTO cars(brand , model , color , yrs) VALUES (?,?,?,?)';
-      $this->pdo->prepare($sql)->execute([$data['brand'], $data['model'], $data['color'], $data['yrs']]);
+      return 'Gostaria de DELETAR o Carro de ID: ' . $data['id'] .
+         ', Marca: ' . $data['brand'] . ' e Modelo: ' . $data['model'] . PHP_EOL;
+   }
+
+   private function insert(array $data): void
+   {
+      $sql = 'INSERT INTO `cars`(`brand` , `model` , `color` , `yrs`) VALUES (?,?,?,?)';
+         $this->pdo
+         ->prepare($sql)
+         ->execute([$data['brand'], $data['model'], $data['color'], $data['yrs']]);
    }
 
    public function findAll(): array
    {
-      $all = $this->pdo->query("SELECT * FROM cars WHERE status = 1")->fetchAll(PDO::FETCH_ASSOC);
+      $all = $this->pdo
+         ->query("SELECT * FROM `cars` WHERE `status` = 1")
+         ->fetchAll(PDO::FETCH_ASSOC);
+      return $all;
+   }
+
+   public function findAllId(): array
+   {
+      $all = $this->pdo
+         ->query("SELECT `id`, `model` FROM `cars` WHERE `status` = 1")
+         ->fetchAll(PDO::FETCH_ASSOC);
       return $all;
    }
 
    public function findById(int $id): array
    {
-      $selectId = $this->pdo->query("SELECT * FROM cars WHERE id = $id")->fetch(PDO::FETCH_ASSOC);
+      $selectId = $this->pdo
+         ->query("SELECT * FROM `cars` WHERE `id` = $id")
+         ->fetch(PDO::FETCH_ASSOC);
       return $selectId;
    }
 
@@ -105,7 +84,7 @@ class Car
 
    public function updateCar(array $data): void
    {
-      $sql = "UPDATE cars SET brand=?, model=?, color=?, yrs=? WHERE id=$data[id]";
+      $sql = "UPDATE `cars` SET `brand`=?, `model`=?, `color`=?, `yrs`=? WHERE `id`=$data[id]";
       $update = $this->pdo->prepare($sql);
       $update->execute([$data['brand'], $data['model'], $data['color'], $data['yrs']]);
    }
@@ -137,19 +116,19 @@ class Car
 
    public function delete(string $id, int $status = 0): void
    {
-      $sql = "UPDATE cars SET status=? WHERE id=$id";
+      $sql = "UPDATE `cars` SET `status`=? WHERE `id`={$id}";
       $del = $this->pdo->prepare($sql);
       $del->execute([$status]);
    }
 
    public function checkCarExist($data): bool
    {
-      $sql = "SELECT COUNT(*) FROM cars 
-            WHERE brand = '" . $data['brand'] . "' 
-            AND model = '" . $data['model'] . "'  
-            AND color = '" . $data['color'] . "' 
-            AND yrs = $data[yrs] 
-            AND status = 1";
+      $sql = "SELECT COUNT(*) FROM `cars` 
+            WHERE `brand` = '" . $data['brand'] . "' 
+            AND `model` = '" . $data['model'] . "'  
+            AND `color` = '" . $data['color'] . "' 
+            AND `yrs` = $data[yrs] 
+            AND `status` = 1";
       $res = $this->pdo->query($sql);
       $count = $res->fetchColumn();
 
@@ -162,7 +141,7 @@ class Car
 
    public function checkIdExist(string $id): bool
    {
-      $sql = "SELECT COUNT(*) FROM cars WHERE id = '" . $id . "'";
+      $sql = "SELECT COUNT(*) FROM `cars` WHERE `id` = '" . $id . "'";
       $res = $this->pdo->query($sql);
       $count = $res->fetchColumn();
       if ($count > 0) {
