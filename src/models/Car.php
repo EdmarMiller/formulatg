@@ -12,7 +12,6 @@ class Car
    public $yrs;
 
    private $pdo;
-
    public function __construct()
    {
       $this->pdo = (new Connection())->conn();
@@ -139,7 +138,7 @@ class Car
       return true;
    }
 
-   public function checkIdExist(string $id): bool
+   public function checkIfIdExist(string $id): bool
    {
       $sql = "SELECT COUNT(*) FROM `cars` WHERE `id` = '" . $id . "'";
       $res = $this->pdo->query($sql);
@@ -151,7 +150,7 @@ class Car
       return false;
    }
 
-   private function messageSuccess(array $data)
+   private function messageSuccess(array $data): string
    {
       return 'Operação realizada com Sucesso!' . PHP_EOL;
    }

@@ -164,7 +164,7 @@ class Driver
 
    public function numberAllDrivers(): int
    {
-      $sql = "SELECT COUNT(*) FROM `drivers`";
+      $sql = "SELECT COUNT(*) FROM `drivers` WHERE `status` = 1";
       $res = $this->pdo->query($sql);
       $count = $res->fetchColumn();
       return $count;

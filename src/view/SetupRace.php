@@ -7,6 +7,7 @@ use App\models\Car;
 use App\models\Circuit;
 use App\models\Competition;
 use App\models\Driver;
+use App\models\Race;
 
 class SetupRace
 {
@@ -24,8 +25,8 @@ class SetupRace
       $prompt = array_merge($prompt, $this->setWaitingCompetition($prompt));
       $prompt = array_merge($prompt, $this->setCompetitors($prompt));
 
-      $race = new RaceMenu();
-      $race->raceMenu($prompt);
+      $race = new GridMenu();
+      $race->gridMenu($prompt);
 
       return sleep(1) . (new RunMenu())->runMenu();
    }
@@ -40,7 +41,7 @@ class SetupRace
          // $prompt['totalLaps'] = ($circuit->findLapsById($id)['totalLaps']);
          return $prompt;
       }
-      sleep(1) . system('clear');
+      sleep(1);
       return $this->chooseCircuit();
    }
 
@@ -64,13 +65,13 @@ class SetupRace
    {
 
       $this->printTableDrivers();
-      $id = $prompt['drive_id'] = readLine('Selecione o piloto principal pelo ID: ');
+      $id = $prompt['driver_id'] = readLine('Selecione o piloto principal pelo ID: ');
 
       $driver = new Driver();
       if ($driver->checkIfIdExists($id)) {
          return $prompt;
       }
-      system('clear');
+      sleep(1);
       return $this->chooseMainDriver();
    }
 
@@ -96,10 +97,10 @@ class SetupRace
 
       $car = new Car();
 
-      if ($car->checkIdExist($id)) {
+      if ($car->checkIfIdExist($id)) {
          return $prompt;
       }
-      sleep(1) . system('clear');
+      sleep(1);
       return $this->chooseMainCar();
    }
 
@@ -157,14 +158,14 @@ class SetupRace
       $driver = new Driver();
       $adversaries = intval($prompt['amount_competitors']) - 1;
 
-      $drivers = $driver->findAllAdversaries($prompt['drive_id'], $adversaries);
+      $drivers = $driver->findAllAdversaries($prompt['driver_id'], $adversaries);
 
       $car = new Car();
       $cars = $car->findAllId();
 
       $competitors = [];
       $competitors[] = [
-         'driver_id' => $prompt['drive_id'],
+         'driver_id' => $prompt['driver_id'],
          'car_id' => $prompt['car_id'],
       ];
 
@@ -176,8 +177,8 @@ class SetupRace
       }
 
       $competitors = $this->getRandomPositions($competitors);
-      $race = new \App\models\Race();
 
+      $race = new Race();
       $race->insertRace($prompt['competition_id'], $competitors);
       return $competitors;
    }

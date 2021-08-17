@@ -34,10 +34,11 @@ class Circuit
       $sql = "SELECT COUNT(*) FROM `circuits` WHERE `id` = '" . $id . "'";
       $res = $this->pdo->query($sql);
       $count = $res->fetchColumn();
+
       if ($count > 0) {
          return true;
       }
-      message('ID não encontrado');
+      message('Digite um Id Valido!');
       return false;
    }
 

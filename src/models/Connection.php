@@ -27,6 +27,7 @@ class Connection
       }
 
    }
+
    public function conn(): PDO
    {
       return $this->_con;

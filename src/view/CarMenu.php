@@ -17,7 +17,7 @@ class CarMenu
          '4' => $this->delete(),
          '5' => (new MainMenu())->run(),
 
-         default => $this->defaultCarMenu()
+         default => reload($this->carMenu())
       };
       return $choice;
    }
@@ -31,12 +31,6 @@ class CarMenu
       display('3- EDITAR CARROS');
       display('4- DELETAR CARRO');
       display('5- VOLTAR PARA O MENU PRINCIPAL');
-   }
-
-   private function defaultCarMenu(): string
-   {
-      display('ESCOLHA UMA OPÇÃO VÁLIDA');
-      return $this->reloadCarMenu();
    }
 
    private function new(): string
@@ -61,13 +55,14 @@ class CarMenu
    private function list(): string
    {
       display('__CARROS CADASTRADOS__');
+
       $car = new Car();
-      $array = $car->findAll();
+      $cars = $car->findAll();
 
       $mask = "|%-3.3s|%-11.11s|%-11.11s|%-11.11s|%-5.5s|" . PHP_EOL;
       printf($mask, 'ID', 'MARCA', 'MODELO', 'COR', 'ANO');
 
-      foreach ($array as $car) {
+      foreach ($cars as $car) {
          printf($mask, $car['id'], $car['brand'], $car['model'], $car['color'], $car['yrs']);
       }
       readline('PRESSIONE QUALQUER TECLA, PARA VOLTAR PRO MENU.');
@@ -82,7 +77,7 @@ class CarMenu
 
       $prompt['id'] = trim(readLine('Digite ID: '));
 
-      if ($car->checkIdExist($prompt['id'])) {
+      if ($car->checkIfIdExist($prompt['id'])) {
 
          message($car->info($car->findById($prompt['id'])));
 
@@ -114,7 +109,7 @@ class CarMenu
 
          $id = $prompt['id'] = trim(readLine('Digite ID: '));
 
-         if ($car->checkIdExist($id)) {
+         if ($car->checkIfIdExist($id)) {
             message($car->msgDelete($car->findById($id)));
 
             $prompt['model'] = trim(readLine('Digite o MODELO e aperte ENTER para DELETAR: '));
@@ -129,7 +124,6 @@ class CarMenu
          return $this->reloadCarMenu();
       }
    }
-
 
    private function reloadCarMenu(): string
    {

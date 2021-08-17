@@ -7,7 +7,7 @@ use App\models\Connection;
 use App\models\Race;
 
 
-class RaceMenu
+class GridMenu
 {
 
    private $pdo;
@@ -19,7 +19,7 @@ class RaceMenu
 
 //TODO: Mudar esse class pra GridMenu... vai fazer mais sentido
 
-   public function raceMenu($prompt)
+   public function gridMenu($prompt)
    {
       $this->printRaceMenu();
 
@@ -28,7 +28,7 @@ class RaceMenu
          '2' => $this->listGrid($prompt),
          '3' => $this->setCanceledStatus($prompt),
 
-         default => $this->defaultRaceMenu($prompt)
+         default => reload($this->gridMenu($prompt))
       };
       return $choice;
    }
@@ -42,13 +42,13 @@ class RaceMenu
       display('3- CANCELAR');
    }
 
-   private function defaultRaceMenu($prompt)
+   private function defaultRaceMenu(array $prompt): string
    {
       display('ESCOLHA UMA OPÇÃO VÁLIDA');
       return $this->reloadRaceMenu($prompt);
    }
 
-   private function start($prompt): array
+   private function start(array $prompt): array
    {
 
       $this->list($prompt);
@@ -58,7 +58,7 @@ class RaceMenu
       return $prompt;
    }
 
-   public function raceInProgressMenu($prompt)
+   public function raceInProgressMenu(array $prompt): array
    {
 
       $this->printRaceInProgressMenu($prompt);
@@ -73,15 +73,13 @@ class RaceMenu
 
    private function printRaceInProgressMenu($prompt): void
    {
-
       system('clear');
       display('__CORRIDA EM ANDAMENTO');
-      display('__SELECIONE UMA OPÇÃO__') . PHP_EOL;
-      $this->list($prompt);
 
+      $this->list($prompt);
+      display('__SELECIONE UMA OPÇÃO__') . PHP_EOL;
       display('1- ULTRAPASSAR');
       display('3- FINALIZAR');
-
    }
 
    private function listGrid($prompt)
@@ -89,7 +87,7 @@ class RaceMenu
       display('__LARGADA__');
       $this->list($prompt);
       readline('Aperte ENTER para voltar para menu');
-      return $this->raceMenu($prompt);
+      return $this->gridMenu($prompt);
    }
 
    private function list($prompt)
@@ -244,6 +242,6 @@ class RaceMenu
 
    private function reloadRaceMenu($prompt)
    {
-      return sleep(1.2) . $this->raceMenu($prompt);
+      return sleep(1.2) . $this->gridMenu($prompt);
    }
 }

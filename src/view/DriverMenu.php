@@ -19,7 +19,7 @@ class DriverMenu
          '4' => $this->delete(),
          '5' => (new MainMenu())->run(),
 
-         default => $this->defaultDriverMenu()
+         default => reload($this->driverMenu())
       };
       return $choice;
    }
@@ -31,14 +31,8 @@ class DriverMenu
       display('1- NOVO PILOTO');
       display('2- LISTAR PILOTOS');
       display('3- EDITAR PILOTOS');
-      display('4- DELETAR PILOTOSS');
+      display('4- DELETAR PILOTOS');
       display('5- VOLTAR PARA O MENU PRINCIPAL');
-   }
-
-   private function defaultDriverMenu(): string
-   {
-      message('ESCOLHA UMA OPÇÃO VÁLIDA');
-      return $this->reloadDriverMenu();
    }
 
    private function new(): string

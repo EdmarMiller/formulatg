@@ -15,7 +15,7 @@ class MainMenu
          '2' => (new CarMenu())->carMenu(),
          '3' => (new RunMenu())->runMenu(),
          '5' => $this->endGame(),
-         default => $this->defaultMainMenu()
+         default => reload($this->run())
       };
       return $choice;
    }
@@ -30,12 +30,6 @@ class MainMenu
       display('3- CORRER');
       display('5- SAIR');
 
-   }
-
-   private function defaultMainMenu(): string
-   {
-      message('ESCOLHA UMA OPÇÃO VÁLIDA');
-      return sleep(1.5) . $this->run();
    }
 
    private function endGame(): string
