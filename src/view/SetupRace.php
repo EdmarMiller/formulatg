@@ -9,6 +9,7 @@ use App\models\Competition;
 use App\models\Driver;
 use App\models\Race;
 
+
 class SetupRace
 {
 
@@ -31,17 +32,24 @@ class SetupRace
       return sleep(1) . (new RunMenu())->runMenu();
    }
 
-   private function chooseCircuit(): array
+   private function chooseCircuit(): array|string
    {
-      $this->printTableCircuits();
-      $id = $prompt['circuit_id'] = readLine('Selecione o circuito pelo ID: ');
 
       $circuit = new Circuit();
+
+      if (!$circuit->checkIfCircuitExists()) {
+         readLine('NAO EXISTE CIRCUITO, CLICK E SERA DIRECIONADO PARA O CADASTRO. ');
+         return (new CircuitMenu())->circuitMenu();
+      }
+
+      $this->printTableCircuits();
+
+      $id = $prompt['circuit_id'] = readLine('Selecione o circuito pelo ID: ');
       if ($circuit->checkIfIdExists($id)) {
          // $prompt['totalLaps'] = ($circuit->findLapsById($id)['totalLaps']);
          return $prompt;
       }
-      sleep(1);
+
       return $this->chooseCircuit();
    }
 
@@ -61,8 +69,13 @@ class SetupRace
       }
    }
 
-   private function chooseMainDriver(): array
+   private function chooseMainDriver(): array | string
    {
+      $car = new Driver();
+      if (!$car->checkIfMinDriverExists()) {
+         readLine('E PRECISO QUE TENHA 2 PILOTOS CADSTRADOS, APERTE E SERA DIRECIONADO PARA O CADASTRO. ');
+         return (new DriverMenu())->driverMenu();
+      }
 
       $this->printTableDrivers();
       $id = $prompt['driver_id'] = readLine('Selecione o piloto principal pelo ID: ');
@@ -90,12 +103,19 @@ class SetupRace
       }
    }
 
-   private function chooseMainCar(): array
+   private function chooseMainCar(): array|string
    {
+
+
+      $car = new Car();
+      if (!$car->checkIfMinCarExists()) {
+         readLine('NAO EXISTE CARRO, APERTE E SERA DIRECIONADO PARA O CADASTRO. ');
+         return (new CarMenu())->carMenu();
+      }
+
       $this->printTableCars();
       $id = $prompt['car_id'] = readLine('Selecione seu Car pelo ID: ');
 
-      $car = new Car();
 
       if ($car->checkIfIdExist($id)) {
          return $prompt;

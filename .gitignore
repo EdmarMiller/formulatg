@@ -3,3 +3,4 @@ runtime/
 docker/nginx/logs/
 pinduca/
 vendor/
+.env

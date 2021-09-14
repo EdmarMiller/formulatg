@@ -1,7 +1,8 @@
 <?php
 
 
-namespace validations;
+namespace validate;
+
 
 
 class Validate

@@ -12,6 +12,7 @@ class Car
    public $yrs;
 
    private $pdo;
+
    public function __construct()
    {
       $this->pdo = (new Connection())->conn();
@@ -25,6 +26,17 @@ class Car
       } catch (\Exception $e) {
          return $e->getMessage();
       }
+   }
+   public function checkIfMinCarExists(): bool
+   {
+      $sql = "SELECT COUNT(*) FROM `cars`";
+      $res = $this->pdo->query($sql);
+      $count = $res->fetchColumn();
+
+      if ($count > 0) {
+         return true;
+      }
+      return false;
    }
 
    public function info(array $data): string
@@ -91,22 +103,22 @@ class Car
    public function validate(array $data): bool
    {
       if (strlen($data['brand']) < 2 || strlen($data['brand']) >= 50) {
-         message('Marca inválida!');
+         message('Marca inválida, O Nome tem que ser mair que 2 é menos que 50 caracteres!');
          return false;
       }
 
       if (strlen($data['model']) < 2 || strlen($data['model']) >= 50) {
-         message('Modelo inválido!');
+         message('Modelo inválido, O Nome tem que ser mair que 2 é menos que 50 caracteres!!');
          return false;
       }
 
       if (strlen($data['color']) < 2 || strlen($data['color']) >= 50) {
-         message('Cor inválida!');
+         message('Cor inválida, O Nome tem que ser mair que 2 é menos que 50 caracteres!!');
          return false;
       }
 
       if (strlen($data['yrs']) != 4 || intval($data['yrs'] == 0)) {
-         message('Ano Inválido');
+         message('Ano Inválido, é preciso ser um numero com 4 digitos ((1985))');
          return false;
       }
 

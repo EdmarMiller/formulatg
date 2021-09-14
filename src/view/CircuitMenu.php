@@ -2,11 +2,11 @@
 
 namespace App\view;
 
-use App\models\Car;
+use App\models\Circuit;
 
-class CarMenu
+class CircuitMenu
 {
-   public function carMenu(): string
+   public function circuitMenu(): string
    {
       $this->printCarMenu();
 
@@ -17,7 +17,7 @@ class CarMenu
          '4' => $this->delete(),
          '5' => (new MainMenu())->run(),
 
-         default => reload($this->carMenu())
+         default => reload($this->circuitMenu())
       };
       return $choice;
    }
@@ -26,107 +26,93 @@ class CarMenu
    {
       system('clear');
       display('__SELECIONE UMA OPÇÃO__');
-      display('1- NOVO CARRO');
-      display('2- LISTAR CARROS');
-      display('3- EDITAR CARROS');
-      display('4- DELETAR CARRO');
+      display('1- NOVO CIRCUITO');
+      display('2- LISTAR CIRCUITOS');
+      display('3- EDITAR CIRCUITOS');
+      display('4- DELETAR CIRCUITO');
       display('5- VOLTAR PARA O MENU PRINCIPAL');
    }
 
    private function new(): string
    {
-      display('__CADASTRAR DE CARRO__');
+      display('__CADASTRO DE CIRCUITO__');
 
       $prompt = [];
-      $prompt['brand'] = readLine('digite a marca: ');
-      $prompt['model'] = readLine('digite o modelo: ');
-      $prompt['color'] = readLine('digite a cor: ');
-      $prompt['yrs'] = intval(readLine('digite o ano: '));
+      $prompt['circuit'] = readLine('Digite o nome do Circuito: ');
+      $prompt['country'] = readLine('Digite o Pais do Circuito: ');
+      $prompt['lengthKM'] = intval(readLine('Digite quanto quilometros tem o Circuito: '));
+      $prompt['totalLaps'] = intval(readLine('Digite o numero de voltas: '));
 
-      $car = new Car();
-      $condition = $car->validate($prompt);
+      $circuit = new Circuit();
+      $condition = $circuit->validate($prompt);
       if ($condition) {
-         $car->newCar($prompt);
+         $circuit->new($prompt);
       }
 
-      return $this->reloadCarMenu();
+      return $this->reloadCircuitMenu();
    }
 
    private function list(): string
    {
-      display('__CARROS CADASTRADOS__');
+      display('__CIRCUITOS CADASTRADOS__');
 
-      $car = new Car();
-      $cars = $car->findAll();
+      $circuit = new Circuit();
+      $array = $circuit->findAll();
 
-      $mask = "|%-3.3s|%-11.11s|%-11.11s|%-11.11s|%-5.5s|" . PHP_EOL;
-      printf($mask, 'ID', 'MARCA', 'MODELO', 'COR', 'ANO');
+      $mask = "|%-3.3s|%-40.40s|%-16.16s|%-6.6s|%-6.6s|" . PHP_EOL;
+      printf($mask, 'ID', 'NOME', 'PAIS', 'KM', 'VOLTAS');
 
-      foreach ($cars as $car) {
-         printf($mask, $car['id'], $car['brand'], $car['model'], $car['color'], $car['yrs']);
+      foreach ($array as $circuit) {
+         printf($mask, $circuit['id'], $circuit['circuit'], $circuit['country'], $circuit['lengthKM'], $circuit['totalLaps']);
       }
       readline('PRESSIONE QUALQUER TECLA, PARA VOLTAR PRO MENU.');
-      return $this->carMenu();
+      return $this->circuitMenu();
    }
 
    private function edit(): string
    {
       display('__EDITAR CARRO__');
-      $car = new Car();
+      $circuit = new Circuit();
       $prompt = [];
 
       $prompt['id'] = trim(readLine('Digite ID: '));
 
-      if ($car->checkIfIdExist($prompt['id'])) {
+      if ($circuit->checkIfIdExist($prompt['id'])) {
 
-         message($car->info($car->findById($prompt['id'])));
+         message($circuit->info($circuit->findById($prompt['id'])));
 
          $option = trim(readLine('Digite Y para CONFIRMAR se o carro selecionado e o correto: '));
          $option = strtoupper($option);
 
          if ($option == 'Y') {
-            $prompt['brand'] = trim(readLine('digite o nova marca: '));
-            $prompt['model'] = trim(readLine('digite o novo modelo: '));
-            $prompt['color'] = trim(readLine('digite o nova cor: '));
-            $prompt['yrs'] = trim(readLine('digite o novo ano: '));
+            $prompt['circuit'] = readLine('Digite o nome do Circuito: ');
+            $prompt['country'] = readLine('Digite o Pais do Circuito: ');
+            $prompt['lengthKM'] = readLine('Digite quanto quilometros tem o Circuito: ');
+            $prompt['totalLaps'] = intval(readLine('Digite o numero de voltas: '));
 
-            $condition = $car->validate($prompt);
+            $condition = $circuit->validate($prompt);
 
             if ($condition) {
-               echo $car->update($prompt);
+               echo $circuit->update($prompt);
             }
          }
       }
-      return $this->reloadCarMenu();
+      return $this->reloadCircuitMenu();
    }
 
+   public function info(array $data): string
+   {
+      return 'Gostaria de editar o ID: ' . $data['id'] .
+         ', Marca: ' . $data['circuit'] . ' e Modelo: ' . $data['circuit'] . PHP_EOL;
+   }
    private function delete()
    {
-      {
-         display('__DELETAR CARRO__');
-         $car = new Car();
-         $prompt = [];
-
-         $id = $prompt['id'] = trim(readLine('Digite ID: '));
-
-         if ($car->checkIfIdExist($id)) {
-            message($car->msgDelete($car->findById($id)));
-
-            $prompt['model'] = trim(readLine('Digite o MODELO e aperte ENTER para DELETAR: '));
-
-            if ($prompt['model'] == $car->findById($id)['model']) {
-               $car->delete($id);
-               message('O carro DELETADO com sucesso!');
-            } else {
-               message('Favor conferir os dados, carro nao DELETADO!');
-            }
-         }
-         return $this->reloadCarMenu();
-      }
+      echo "funcao será implementada em breve";
+      return sleep(3) . $this->circuitMenu();
    }
 
-   private function reloadCarMenu(): string
+   private function reloadCircuitMenu(): string
    {
-      return sleep(3) . $this->carMenu();
+      return sleep(5) . $this->circuitMenu();
    }
 }

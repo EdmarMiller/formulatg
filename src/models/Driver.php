@@ -2,7 +2,6 @@
 
 namespace App\models;
 
-use Exception;
 use PDO;
 
 class Driver
@@ -105,6 +104,18 @@ class Driver
       } catch (\Exception $e) {
          return $e->getMessage();
       }
+   }
+
+   public function checkIfMinDriverExists(): bool
+   {
+      $sql = "SELECT COUNT(*) FROM `drivers`";
+      $res = $this->pdo->query($sql);
+      $count = $res->fetchColumn();
+
+      if ($count > 1) {
+         return true;
+      }
+      return false;
    }
 
    public function updateDrive(array $data): void

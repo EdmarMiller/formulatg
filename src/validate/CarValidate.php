@@ -1,7 +1,7 @@
 <?php
 
 
-namespace validations;
+namespace validate;
 
 
 class CarValidate extends Validate

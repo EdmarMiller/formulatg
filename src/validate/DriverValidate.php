@@ -1,7 +1,7 @@
 <?php
 
 
-namespace validations;
+namespace validate;
 
 
 class DriverValidate extends Validate

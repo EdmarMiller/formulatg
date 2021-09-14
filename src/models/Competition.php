@@ -23,10 +23,10 @@ class Competition
          $sql = "INSERT INTO `competition` (`status`,`circuit_id`,`amount_competitors`) VALUES (?,?,?)";
          $this->pdo
             ->prepare($sql)
-            ->execute([$data['status'],$data['circuit_id'],$data['amount_competitors']]);
+            ->execute([$data['status'], $data['circuit_id'], $data['amount_competitors']]);
 
          $lastId = $this->pdo->lastInsertId();
-                  return $lastId;
+         return $lastId;
 
       } catch (\Exception $e) {
          return $e->getMessage();
@@ -40,6 +40,8 @@ class Competition
          ->fetch(PDO::FETCH_ASSOC);
       return $status;
    }
+
+
 
    public function update(array $data): string
    {
@@ -63,14 +65,5 @@ class Competition
       return 'Alteração de Status bem sucedida!' . PHP_EOL;
    }
 
-   //public function select(int $choice): string
-   //{
-   //   $status = match ($choice) {
-   //      1 => 'WAITING',
-   //      2 => 'IN PROGRESS',
-   //      3 => 'FINISHED',
-   //      default => 'STATUS INDEFINIDO'
-   //   };
-   //   return $status;
-   //}
+
 }
