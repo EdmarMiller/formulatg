@@ -44,10 +44,10 @@ services:
     networks:
       - db
     environment:
-      - MYSQL_ROOT_PASSWORD=api123
-      - MYSQL_USER=api
-      - MYSQL_PASSWORD=api123
-      - MYSQL_DATABASE=formula_tg
+      - MYSQL_ROOT_PASSWORD=PASS_ROOT
+      - MYSQL_USER=USER_DB
+      - MYSQL_PASSWORD=PASS_DB
+      - MYSQL_DATABASE=NAME_DB
     volumes:
       - ./runtime/db:/var/lib/mysql
 
