@@ -109,7 +109,7 @@ class GridMenu
    {
 
       $race = new Race();
-      $race = $race->findMainDriver($prompt['competition_id'],$prompt['drive_id']);
+      $race = $race->findMainDriver($prompt['competition_id'],$prompt['driver_id']);
 
       $mask = "|%-3.3s|%-11.11s|%-11.11s|%-7.7s|" . PHP_EOL;
       printf($mask, 'ID', 'PILOTO', 'MODELO', 'POSICAO');
@@ -180,7 +180,9 @@ class GridMenu
       if ($idAdv != "") {
          if (preg_match("/^([0-9]+)$/", $idAdv)) {
             if ($this->checkIfIdExists($prompt, $idAdv)) {
-               $this->overtake($prompt['competition_id'], $prompt['drive_id'], $idAdv);
+               //var_dump($prompt);
+               //exit;
+               $this->overtake($prompt['competition_id'], $prompt['driver_id'], $idAdv);
                return $this->raceInProgressMenu($prompt);
             }
          } else {
